@@ -1,14 +1,14 @@
 v8-project
 ==========
 
-A set of tools to work with V8 JavaScript engine. In particular it cares about all platform specific peculiarities when one has to obtain a new version of V8 or build it for a particular platform.
+A set of tools to work with V8 JavaScript engine. In particular it takes care of all platform specific peculiarities when one has to obtain a new version of V8 or build it for a particular platform.
 
 Getting the help
 ================
 
 For a brief description of the available functionality run `build.py` without parameters.  
 For a comprehensive overview of available commands and their options run `build.py --help`.  
-Use `--help` to get details explaination of a command.
+Use `--help` to get detailed explaination of a command.
 
 
 Getting V8
