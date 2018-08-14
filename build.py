@@ -19,8 +19,7 @@ def read_as_json(file_path):
 
 
 def sync(v8_revision):
-    '''Clones all required code and tools.
-    '''
+    """Clones all required code and tools."""
     working_dir = os.path.join(this_dir_path, third_party)
     depot_tools_path = os.sep.join([working_dir, 'depot_tools'])
     # a simple way to ensure that depot_tools exists
@@ -43,13 +42,13 @@ def sync(v8_revision):
 
 
 def build_v8(target_arch, build_type, target_platform):
-    '''Build v8_monolith library.
+    """Build v8_monolith library.
 
     Arguments:
         target_arch - usually 'arm', 'ia32' or 'x64'
         build_type - 'release' or 'debug'
         target_platform - either 'android' or sys.platform
-    '''
+    """
     working_dir = os.path.join(this_dir_path, third_party, 'v8')
     output_dir = os.path.abspath(os.path.join('build', target_platform, target_arch, build_type))
     call_gn = [os.path.join('..', 'depot_tools', 'gn')]
@@ -82,8 +81,7 @@ def build_v8(target_arch, build_type, target_platform):
 
 def add_build_v8_parser(subparsers, option_name, target_platform,
                         target_arch_choices, build_type_choices):
-    '''Creates and returns a simple subparser.
-    '''
+    """Creates and returns a simple subparser."""
     parser = subparsers.add_parser(option_name)
     parser.add_argument('target_arch', choices=target_arch_choices)
     has_build_type_choice = not isinstance(build_type_choices, str)
@@ -95,6 +93,7 @@ def add_build_v8_parser(subparsers, option_name, target_platform,
 
 
 def print_brief_description(parser):
+    """Print all available commands with all possible arguments in a comprehensive form."""
     def gen_subparsers(choice_item):
         choice, parser = choice_item
         for subparsers_action in parser._actions:
