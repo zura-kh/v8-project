@@ -7,6 +7,7 @@ import os
 import subprocess
 import sys
 
+depot_tools_repository_url = 'https://chromium.googlesource.com/chromium/tools/depot_tools.git'
 default_v8_revision = '4a1a6a410f0b60c361aa1bf14dd911254c51e1b1'
 
 this_dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -24,7 +25,7 @@ def sync(v8_revision):
     depot_tools_path = os.sep.join([working_dir, 'depot_tools'])
     # a simple way to ensure that depot_tools exists
     if not os.path.exists(depot_tools_path):
-        cmd = ['git', 'clone', 'https://chromium.googlesource.com/chromium/tools/depot_tools.git']
+        cmd = ['git', 'clone', depot_tools_repository_url]
         subprocess.run(cmd, cwd=working_dir, check=True)
     env = os.environ.copy()
     env['PATH'] = os.pathsep.join([os.environ['PATH'], depot_tools_path])
