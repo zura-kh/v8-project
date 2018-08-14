@@ -94,39 +94,32 @@ def add_build_v8_parser(subparsers, option_name, target_platform,
     return parser
 
 
-was_help_called = False
+def print_brief_description(parser):
+    def gen_subparsers(choice_item):
+        choice, parser = choice_item
+        for subparsers_action in parser._actions:
+            if isinstance(subparsers_action, argparse._SubParsersAction):
+                yield from subparsers_action.choices.items()
 
+    def print_choice_item(choice_item):
+        choice, parser = choice_item
+        print(parser.format_usage())
 
-class FullHelpAction(argparse._HelpAction):
-    def __call__(self, parser, namespace, values, option_string=None):
-        global was_help_called
-        was_help_called = True
-
-        def gen_subparsers(choice_item):
-            choice, parser = choice_item
-            for subparsers_action in parser._actions:
-                if isinstance(subparsers_action, argparse._SubParsersAction):
-                    yield from subparsers_action.choices.items()
-
-        def print_choice_item(choice_item):
-            choice, parser = choice_item
-            print(parser.format_usage())
-
-        # DFS
-        frontier = [('', parser)]
-        while frontier:
-            # pop first node from the frontier
-            choice_item = frontier.pop(0)
-            # visit node
-            print_choice_item(choice_item)
-            # prepend children
-            frontier = list(gen_subparsers(choice_item)) + frontier
+    # DFS
+    frontier = [('', parser)]
+    while frontier:
+        # pop first node from the frontier
+        choice_item = frontier.pop(0)
+        # visit node
+        print_choice_item(choice_item)
+        # prepend children
+        frontier = list(gen_subparsers(choice_item)) + frontier
 
 
 if __name__ == '__main__':
     logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
     parser = argparse.ArgumentParser(description='Helper to build v8 for ABP', add_help=False)
-    parser.add_argument('--help', action=FullHelpAction)
+    parser.add_argument('--help', default=False, action='store_true')
     subparsers = parser.add_subparsers(title='available subcommands', help='additional help')
 
     sync_arg_parser = subparsers.add_parser('sync')
@@ -143,5 +136,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if 'func' in args:
         args.func(args)
-    elif not was_help_called:
+    elif args.help:
         parser.print_help()
+    else:
+        print_brief_description(parser)
